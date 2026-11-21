@@ -190,7 +190,13 @@ Five cloudy photos removed from `wallpapers/` (`09-comet-atlas`, `10-vang-vieng-
 | Play Store app updates (owner asked for them) | Not restorable: Android cannot downgrade apps without uninstalling. Disabled packages stayed disabled after the updates |
 | Reboots (`adb reboot`) after the HDMI-CEC change and the PS5 test | Nothing to restore |
 
-Still on and to be switched off when the work is finished: network ADB on port 5555 (turn off Developer options, USB/network debugging on the TV, then confirm `adb connect <tv ip>:5555` is refused).
+### Debugging switched off (owner approved, 2026-11-21, end of session)
+
+Before: `adb_enabled=1`, `development_settings_enabled=1`, network ADB listening on port 5555. Applied: `settings put global adb_enabled 0` and `settings put global development_settings_enabled 0`. Sideloading (`secure install_non_market_apps=1`) was left as it was.
+
+Restore (only if you need ADB again): on the TV open Settings, Device Preferences, About, press **Build** seven times, then turn on USB debugging in Developer options. Then from the PC: `adb tcpip 5555` over USB, or `adb connect <tv ip>:5555` once network debugging is on. The PC key is already authorised.
+
+Found at the end: `com.sonyliv` was installed again (22:23 the same day) by Xiaomi's update service `com.xiaomi.mitv.updateservice`, which re-pushes partner apps after they are uninstalled. The service was left on because it also handles firmware updates. If the app is unwanted: `pm uninstall --user 0 com.sonyliv`.
 
 ### Kept on purpose (not disabled)
 
