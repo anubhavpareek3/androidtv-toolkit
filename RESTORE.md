@@ -179,6 +179,19 @@ Seven light wallpapers (brightness 132-183 of 255: Dune 45, Synevyr, Viru Bog wi
 
 Five cloudy photos removed from `wallpapers/` (`09-comet-atlas`, `10-vang-vieng-sky`, `12-aurora-tuntorp`, `25-stormy-clouds-don-det`, `29-cumulonimbus-sunset`; kept at `C:\Projects\work\wallpapers-removed-light\`) and ten generated dark gradients added (`31` to `40`, ember, emerald, rose, indigo-cyan, sunset, ocean, plum-gold, forest, ice, wine-coral). The folder now holds 34 pictures: 19 photos and 15 gradients. Restore: delete `31-` to `40-gradient-*.jpg`, copy the five photos back and push the theme.
 
+### Audit additions (2026-11-21, end of session): changes that had no entry yet
+
+| Change | Restore |
+|---|---|
+| Launcher defaults changed in the build (`patches/launcher-changes.patch`): `dock_apps` set to 7 apps, `columns` 4 to 7, `hidden_apps` and `live_tv_package` from `com.mediatek.wwtv.tvcenter` to `com.android.tv`, Gradle `networkTimeout` 10000 to 600000 | Build the launcher from unpatched upstream and `adb install -r` it, or go back to stock Home with the Group 7 commands |
+| Theme keys `wifi_status_color` and `wifi_status_warnings` set to `true` (green online, orange no internet, red offline) | Set both to `false` and push the theme, or `tools\theme.ps1 -TvHost <tv ip> -Reset` |
+| Wi-Fi off/on test, run as `setsid sh -c 'svc wifi disable; sleep 25; svc wifi enable'` so it turns itself back on | Nothing to restore (self-reverting). If Wi-Fi is ever left off: `adb shell svc wifi enable` (or the TV's Settings) |
+| `pm trim-caches 64G` freed about 400 MB of app caches | Not restorable and not needed: apps rebuild their caches |
+| Play Store app updates (owner asked for them) | Not restorable: Android cannot downgrade apps without uninstalling. Disabled packages stayed disabled after the updates |
+| Reboots (`adb reboot`) after the HDMI-CEC change and the PS5 test | Nothing to restore |
+
+Still on and to be switched off when the work is finished: network ADB on port 5555 (turn off Developer options, USB/network debugging on the TV, then confirm `adb connect <tv ip>:5555` is refused).
+
 ### Kept on purpose (not disabled)
 
 Voice assistant (`com.google.android.katniss`), Chromecast (`com.google.android.apps.mediashell`), firmware updates, Google sign-in (`com.google.android.tvrecommendations`), TalkBack, Netflix, Prime Video, YouTube, Hotstar, ZEE5 (`com.graymatrix.did`), Airtel Xstream, FanCode.
