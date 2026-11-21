@@ -1,0 +1,2 @@
+# Keep the patch byte-exact so `git apply` works on Windows too
+*.patch -text

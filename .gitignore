@@ -33,3 +33,7 @@ adb-*.log
 Thumbs.db
 .idea/
 .vscode/
+
+# ADB private keys (pair this PC with the TV): never commit
+adbkey*
+*.adbkey

@@ -2,7 +2,8 @@
 
 - Codename: dangalUHD (Amlogic), Android TV 11 (SDK 30)
 - Firmware: RTT0.211201.001.1150, security patch 2024-02-05
-- Home / launcher: `com.google.android.tvlauncher` (stock Android TV launcher)
+- Home / launcher: now the CleanYourTV launcher `com.gathin.tvhome` with the `my-ambient-glass` theme (see the README and `RESTORE.md`). The stock launcher `com.google.android.tvlauncher` is disabled and can be re-enabled (restore steps in `RESTORE.md`).
+- Live TV app: `com.android.tv`, hidden from the grid (the Inputs menu covers it)
 - Reference list: `examples/xiaomi-mitv-axso2-android11/debloat.txt` in the cleanyourtv repo (not copied here)
 - Storage: about 4.4 GB `/data`; tight. After cleanup and `pm trim-caches 64G`: about 2.1 GB free.
 

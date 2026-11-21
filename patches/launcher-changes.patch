@@ -1,0 +1,96 @@
+diff -ru a/launcher b/launcher
+--- a/launcher/app/src/main/java/com/gathin/tvhome/MainActivity.java	2026-11-21 18:08:23.924265800 +0530
++++ b/launcher/app/src/main/java/com/gathin/tvhome/MainActivity.java	2026-11-21 21:53:55.998537300 +0530
+@@ -726,6 +726,15 @@
+             // A single row never shows the names under its tiles (the title above the row names the app), so the
+             // 7dp gap and 22dp label item_app.xml keeps for them would only lift the row: sit it that much lower.
+             if (singleRow && !cfg.alwaysShowNames) want += (int) (29 * density);
++            // The next row starts BOTTOM_ROOM_DP above the bottom edge, which is the peek under the dock. Sit the dock
++            // that much lower so the next row only shows once you press Down. Both the room and the grid height scale
++            // with the screen, so this holds on any TV; on a screen too short for it, the dock stops 8dp short of the
++            // bottom edge instead of running off it.
++            if (rowsBelowDock == 0 && MainActivity.this.dockRow && !singleRow) {
++                int lower = (int) (AppAdapter.BOTTOM_ROOM_DP * density);
++                int limit = Math.max(want, h - dockRow - (int) (8 * density));
++                want = Math.min(want + lower, limit);
++            }
+             if (grid.getPaddingTop() != want) {
+                 grid.setPadding(grid.getPaddingLeft(), want, grid.getPaddingRight(), grid.getPaddingBottom());
+                 // A vertical grid parks the dock on the new padding line by scrolling (onTileFocused); a sideways
+@@ -1995,6 +2004,11 @@
+     /** The shelf's text for this dock app: its name and, on the cinematic shelf, "Last opened" and the dots. */
+     private void fillHero(int position, String label) {
+         heroName.setText(label);
++        // The name takes the app's own colour (Netflix red, Prime blue), lifted 35% toward white to stay readable.
++        int accent = adapter.ambientColorAt(position);
++        int r = ((accent >> 16) & 0xFF), g = ((accent >> 8) & 0xFF), b = (accent & 0xFF);
++        heroName.setTextColor(0xFF000000 | ((r + (255 - r) * 35 / 100) << 16) | ((g + (255 - g) * 35 / 100) << 8)
++                | (b + (255 - b) * 35 / 100));
+         if (!cinematic) return;
+         updateHeroMeta(position);
+         updateHeroDots(position);
+diff -ru a/launcher b/launcher
+--- a/launcher/app/src/main/res/layout/activity_main.xml	2026-11-21 18:08:24.010960000 +0530
++++ b/launcher/app/src/main/res/layout/activity_main.xml	2026-11-21 21:02:14.986489700 +0530
+@@ -128,7 +128,7 @@
+             android:layout_height="wrap_content"
+             android:textColor="#FFFFFFFF"
+             android:textSize="48sp"
+-            android:fontFamily="@string/font_light"
++            android:fontFamily="@string/font_extralight"
+             android:letterSpacing="-0.02"
+             android:includeFontPadding="false"
+             android:singleLine="true" />
+diff -ru a/launcher b/launcher
+--- a/launcher/app/src/main/res/values/config.xml	2026-11-21 18:08:24.083211900 +0530
++++ b/launcher/app/src/main/res/values/config.xml	2026-11-21 21:02:21.356383100 +0530
+@@ -19,9 +19,12 @@
+     <!-- Apps pinned to the dock row at the bottom, in this order. Missing apps are skipped. -->
+     <string-array name="dock_apps">
+         <item>com.netflix.ninja</item>
+-        <item>com.amazon.amazonvideo.livingroom</item>
++        <item>tv.airtel.xstream.tvapp</item>
+         <item>com.google.android.youtube.tv</item>
+         <item>in.startv.hotstar</item>
++        <item>com.amazon.amazonvideo.livingroom</item>
++        <item>com.apple.atve.androidtv.appletv</item>
++        <item>com.android.vending</item>
+     </string-array>
+     <!-- With fewer dock_apps than columns (or a dock app that is not installed), the free dock slots take
+          the first grid apps, so the dock never shows a gap. false leaves them empty (#162); a theme can
+@@ -30,12 +33,12 @@
+ 
+     <!-- Apps never shown as tiles (e.g. the Live TV app, which the Inputs menu already covers). -->
+     <string-array name="hidden_apps">
+-        <item>com.mediatek.wwtv.tvcenter</item>
++        <item>com.android.tv</item>
+         <item>com.mitv.gallery</item>
+     </string-array>
+ 
+     <!-- The TV's Live TV / tuner app, offered at the end of the Inputs menu. Leave empty to omit. -->
+-    <string name="live_tv_package" translatable="false">com.mediatek.wwtv.tvcenter</string>
++    <string name="live_tv_package" translatable="false">com.android.tv</string>
+ 
+     <!-- Open the Live TV app above the first time Home comes up after the TV is switched on, for sets that are
+          mostly used for broadcast TV. Once per boot: Home after that stays Home. Can also be set with
+@@ -421,7 +424,7 @@
+ 
+     <!-- Tiles per row in the grid; the dock always has this many slots. Tiles are 180dp wide at 4 columns and
+          shrink to fit from 5 up (about 144dp at 5, 117dp at 6 on a 1080p TV). -->
+-    <integer name="columns">4</integer>
++    <integer name="columns">7</integer>
+ 
+     <!-- Basic motion is on; advanced effects are opt-in in the launcher's own Settings screen. -->
+     <bool name="animations">true</bool>
+diff -ru a/launcher b/launcher
+--- a/launcher/gradle/wrapper/gradle-wrapper.properties	2026-11-21 18:08:24.144736700 +0530
++++ b/launcher/gradle/wrapper/gradle-wrapper.properties	2026-11-21 19:43:34.358010800 +0530
+@@ -2,7 +2,7 @@
+ distributionPath=wrapper/dists
+ distributionUrl=https\://services.gradle.org/distributions/gradle-8.9-bin.zip
+ distributionSha256Sum=d725d707bfabd4dfdc958c624003b3c80accc03f7037b5122c4b1d0ef15cecab
+-networkTimeout=10000
++networkTimeout=600000
+ validateDistributionUrl=true
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
