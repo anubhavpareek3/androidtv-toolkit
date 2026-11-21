@@ -1,0 +1,35 @@
+# APKs and app bundles
+*.apk
+*.xapk
+*.apks
+*.aab
+
+# Keystores and signing material
+*.keystore
+*.jks
+*.p12
+*.pem
+*.key
+
+# Build output
+build/
+.gradle/
+out/
+dist/
+
+# Backups (may contain the TV's IP address or device identifiers)
+backups/
+*.bak
+*backup*
+*.ab
+*.tar
+*.zip
+tv-ip*
+*ip.txt
+adb-*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
