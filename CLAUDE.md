@@ -2,7 +2,7 @@
 
 ## Device
 
-- TV: **MiTV-AXSO2**, Android TV 11. Details: `devices/MiTV-AXSO2.md`. State and next step: `SESSION.md`.
+- TV: **MiTV-AXSO2**, Android TV 11. Details: `devices/MiTV-AXSO2.md`. State and next step: `SESSION.md` (local only, not in git).
 - The stock build must stay revertable at all times.
 - Launcher work copy lives outside this repo (`C:\Projects\work\cleanyourtv`, not git). Upstream reference: `C:\Projects\reference\cleanyourtv` (read-only).
 - This repo is **public**: everything committed is visible to everyone.

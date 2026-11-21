@@ -37,3 +37,6 @@ Thumbs.db
 # ADB private keys (pair this PC with the TV): never commit
 adbkey*
 *.adbkey
+
+# Working hand-off note: local only
+SESSION.md
